@@ -1,32 +1,40 @@
 ﻿using SaberTestTask;
 
-{
-    var myListRandom = new MyListRandom();
-    myListRandom.Add("head");
-    myListRandom.Add("item0");
-    myListRandom.Add("item1");
-    myListRandom.Add("item2");
-    myListRandom.Add("tail");
-    myListRandom.SetRandoms();
+const string serializedFilename = "serialized.txt";
+const string serializedCopyFilename = "serialized-copy.txt";
 
-    var stream = new MemoryStream();
+File.Delete(serializedFilename);
+File.Delete(serializedCopyFilename);
+
+var myListRandom = new MyListRandom();
+myListRandom.Add("head");
+myListRandom.Add("item0");
+myListRandom.Add("item1");
+myListRandom.Add("item2");
+myListRandom.Add("item3");
+myListRandom.Add("item4");
+myListRandom.Add("tail");
+myListRandom.SetRandoms();
+
+using (var stream = File.Create(serializedFilename))
+{
     myListRandom.Serialize(stream);
-    stream.Position = 0;
-    using var reader = new StreamReader(stream);
-    var str = reader.ReadToEnd();
-    File.WriteAllText("D:\\text0.txt", str);
 }
 
+
+myListRandom = new MyListRandom();
+using (var stream = File.OpenRead(serializedFilename))
 {
-    var newListRandom = new MyListRandom();
-    newListRandom.Deserialize(File.OpenRead("D:\\text0.txt"));
-
-    var stream = new MemoryStream();
-    newListRandom.Serialize(stream);
-    stream.Position = 0;
-    using var reader = new StreamReader(stream);
-    var str = reader.ReadToEnd();
-
-    File.WriteAllText("D:\\text1.txt", str);
+    myListRandom.Deserialize(stream);
 }
-Console.WriteLine();
+
+using (var stream = File.Create(serializedCopyFilename))
+{
+    myListRandom.Serialize(stream);
+}
+
+var contents0 = File.ReadAllText(serializedFilename);
+var contents1 = File.ReadAllText(serializedCopyFilename);
+var areSerializedEqual = contents0.Equals(contents1);
+Console.WriteLine($"Serialized correctly: {areSerializedEqual}");
+Console.ReadKey(true);
