@@ -203,9 +203,7 @@ public static class Tests
     public static void Deserialize_Invalid_FromFile()
     {
         // Arrange
-        const string serialized = "[{\"Id\":\"0\",\"Data\":\"head\",\"Random\":\"1\",}," +
-                                  "{\"Id\":\"1\",\"Data\":\"node0\",\"Random\":\"2\",}," +
-                                  "{\"Id\":\"2\",\"Data\":\"tail\",\"Random\":\"0\",},]";
+        const string serialized = "@@@@@@";
 
         var tempFilePath = Path.GetTempFileName();
         File.WriteAllText(tempFilePath, serialized);
@@ -296,9 +294,7 @@ public static class Tests
     public static void Deserialize_Invalid_FromMemory()
     {
         // Arrange
-        const string serialized = "[{\"Id\":\"0\",\"Data\":\"head\",\"Random\":\"1\",}," +
-                                  "{\"Id\":\"1\",\"Data\":\"node0\",\"Random\":\"2\",}," +
-                                  "{\"Id\":\"2\",\"Data\":\"tail\",\"Random\":\"0\",},]";
+        const string serialized = "@@@@@";
 
         var stream = new MemoryStream();
         using var writer = new StreamWriter(stream);

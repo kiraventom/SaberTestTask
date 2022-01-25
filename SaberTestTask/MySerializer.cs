@@ -67,7 +67,7 @@ public static class MySerializer
         Dictionary<ListNode, int> randomIds = new(); // node : node.Random.Id
 
         ReadUntil(reader, '[');
-        while ((char) reader.Read() != ']')
+        while ((char) reader.Read() != ']' && !reader.EndOfStream)
         {
             var node = DeserializeNode(reader, indexedNodes, randomIds);
             list.Add(node);
@@ -99,7 +99,7 @@ public static class MySerializer
     {
         ListNode node = new();
 
-        while ((char) reader.Read() != '}')
+        while ((char) reader.Read() != '}' && !reader.EndOfStream)
         {
             var (name, value) = DeserializeProperty(reader);
             switch (name)
