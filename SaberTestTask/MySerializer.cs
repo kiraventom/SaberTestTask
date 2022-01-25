@@ -63,13 +63,13 @@ public static class MySerializer
     public static void Deserialize(Stream stream, MyListRandom list)
     {
         var reader = new StreamReader(stream);
-        Dictionary<int, ListNode> indexedNodes = new();
-        Dictionary<ListNode, int> randomNodes = new();
+        Dictionary<int, ListNode> indexedNodes = new(); // index : node
+        Dictionary<ListNode, int> randomIds = new(); // node : node.Random.Id
 
         ReadUntil(reader, '[');
         while ((char) reader.Read() != ']')
         {
-            var node = DeserializeNode(reader, indexedNodes, randomNodes);
+            var node = DeserializeNode(reader, indexedNodes, randomIds);
             list.Add(node);
         }
 
@@ -78,7 +78,7 @@ public static class MySerializer
             var node = list.Head;
             while (node is not null)
             {
-                var randomNodeExists = randomNodes.TryGetValue(node, out var randomId);
+                var randomNodeExists = randomIds.TryGetValue(node, out var randomId);
                 if (randomNodeExists)
                 {
                     var randomNode = indexedNodes[randomId];
@@ -95,7 +95,7 @@ public static class MySerializer
     private static ListNode DeserializeNode(
         StreamReader reader, 
         IDictionary<int, ListNode> indexedNodes,
-        IDictionary<ListNode, int> randomNodes)
+        IDictionary<ListNode, int> randomIds)
     {
         ListNode node = new();
 
@@ -114,9 +114,9 @@ public static class MySerializer
                     break;
                 
                 case nameof(node.Random):
-                    var isRandom = int.TryParse(value, out var randomId);
-                    if (isRandom)
-                       randomNodes.Add(node, randomId); 
+                    var isThereRandom = int.TryParse(value, out var randomId);
+                    if (isThereRandom)
+                       randomIds.Add(node, randomId); 
                     break;
                 
                 // can be expanded for new properties deserialization

@@ -55,6 +55,55 @@ public class MyListRandom : ListRandom
         }
     }
 
+    public override bool Equals(object obj)
+    {
+        return obj is ListRandom listToCompareTo && Equals(listToCompareTo);
+    }
+
+    public bool Equals(ListRandom listToCompareTo)
+    {
+        if (listToCompareTo.Count != this.Count)
+            return false;
+
+        Dictionary<ListNode, int> indexedNodes = new();
+        Dictionary<ListNode, int> indexedNodesToCompareTo = new();
+
+        {   
+            var node = this.Head;
+            var nodeToCompareTo = this.Head;
+            var index = 0;
+            while (node is not null && nodeToCompareTo is not null)
+            {
+                indexedNodes.Add(node, index);
+                indexedNodesToCompareTo.Add(nodeToCompareTo, index);
+
+                node = node.Next;
+                nodeToCompareTo = nodeToCompareTo.Next;
+                ++index;
+            }
+        }
+
+        {
+            var node = this.Head;
+            var nodeToCompareTo = this.Head;
+            while (node is not null && nodeToCompareTo is not null)
+            {
+                if (!node.Data.Equals(nodeToCompareTo.Data))
+                    return false;
+
+                var nodeRandomId = indexedNodes[node.Random];
+                var nodeRandomIdToCompareTo = indexedNodesToCompareTo[nodeToCompareTo.Random];
+                if (nodeRandomId != nodeRandomIdToCompareTo)
+                    return false;
+
+                node = node.Next;
+                nodeToCompareTo = nodeToCompareTo.Next;
+            }
+        }
+
+        return true;
+    }
+
     private ListNode GetRandom()
     {
         if (Count == 0)
