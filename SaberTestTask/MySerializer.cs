@@ -5,7 +5,7 @@ namespace SaberTestTask;
 public static class MySerializer
 {
     private const string IdPropertyName = "Id";
-    public static void Serialize(Stream stream, MyListRandom list)
+    public static void Serialize(Stream stream, ListRandom list)
     {
         Dictionary<ListNode, int> indexedNodes = new();
 

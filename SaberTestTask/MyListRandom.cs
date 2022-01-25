@@ -1,11 +1,7 @@
-﻿using System.Text;
-
-namespace SaberTestTask;
+﻿namespace SaberTestTask;
 
 public class MyListRandom : ListRandom
 {
-    private static readonly Random Random = new();
-
     public override void Serialize(Stream s)
     {
         MySerializer.Serialize(s, this);
@@ -14,12 +10,6 @@ public class MyListRandom : ListRandom
     public override void Deserialize(Stream s)
     {
         MySerializer.Deserialize(s, this);
-    }
-
-    public void Add(string data)
-    {
-        var newNode = new ListNode() {Data = data};
-        Add(newNode);
     }
 
     public void Add(ListNode newNode)
@@ -43,18 +33,6 @@ public class MyListRandom : ListRandom
         ++Count;
     }
 
-    public void SetRandoms()
-    {
-        var node = Head;
-        while (node is not null)
-        {
-            if (node.Random is null)
-                node.Random = GetRandom();
-
-            node = node.Next;
-        }
-    }
-
     public override bool Equals(object obj)
     {
         return obj is ListRandom listToCompareTo && Equals(listToCompareTo);
@@ -62,15 +40,15 @@ public class MyListRandom : ListRandom
 
     public bool Equals(ListRandom listToCompareTo)
     {
-        if (listToCompareTo.Count != this.Count)
+        if (Count != listToCompareTo.Count)
             return false;
 
         Dictionary<ListNode, int> indexedNodes = new();
         Dictionary<ListNode, int> indexedNodesToCompareTo = new();
 
         {   
-            var node = this.Head;
-            var nodeToCompareTo = this.Head;
+            var node = Head;
+            var nodeToCompareTo = listToCompareTo.Head;
             var index = 0;
             while (node is not null && nodeToCompareTo is not null)
             {
@@ -84,8 +62,8 @@ public class MyListRandom : ListRandom
         }
 
         {
-            var node = this.Head;
-            var nodeToCompareTo = this.Head;
+            var node = Head;
+            var nodeToCompareTo = listToCompareTo.Head;
             while (node is not null && nodeToCompareTo is not null)
             {
                 if (!node.Data.Equals(nodeToCompareTo.Data))
@@ -102,18 +80,5 @@ public class MyListRandom : ListRandom
         }
 
         return true;
-    }
-
-    private ListNode GetRandom()
-    {
-        if (Count == 0)
-            return null;
-
-        var randomIndex = Random.Next(Count);
-        var randomNode = Head;
-        for (int i = 0; i < randomIndex; i++)
-            randomNode = randomNode.Next;
-
-        return randomNode;
     }
 }

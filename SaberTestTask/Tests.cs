@@ -37,7 +37,7 @@ public static class Tests
         var actual = File.ReadAllText(tempFilePath);
         try
         {
-            Debug.Assert(actual.Equals(expected));
+            Debug.Assert(expected.Equals(actual));
             Console.WriteLine($"{nameof(Serialize_FullList_ToFile)} passed");
         }
         catch (Exception e)
@@ -68,7 +68,7 @@ public static class Tests
         var actual = File.ReadAllText(tempFilePath);
         try
         {
-            Debug.Assert(actual.Equals(expected));
+            Debug.Assert(expected.Equals(actual));
             Console.WriteLine($"{nameof(Serialize_EmptyList_ToFile)} passed");
         }
         catch (Exception e)
@@ -114,7 +114,7 @@ public static class Tests
         var actual = reader.ReadToEnd();
         try
         {
-            Debug.Assert(actual.Equals(expected));
+            Debug.Assert(expected.Equals(actual));
             Console.WriteLine($"{nameof(Serialize_FullList_ToMemory)} passed");
         }
         catch (Exception e)
@@ -135,13 +135,12 @@ public static class Tests
         myListRandom.Serialize(stream);
         
         // Assert
-
         stream.Position = 0;
         var reader = new StreamReader(stream);
         var actual = reader.ReadToEnd();
         try
         {
-            Debug.Assert(actual.Equals(expected));
+            Debug.Assert(expected.Equals(actual));
             Console.WriteLine($"{nameof(Serialize_EmptyList_ToMemory)} passed");
         }
         catch (Exception e)
